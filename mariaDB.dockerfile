@@ -1,0 +1,30 @@
+
+
+
+ARG DB_HOST
+ARG DB_USER
+ARG DB_PASS
+ARG DB_NAME
+ARG DB_PORT
+ARG CMD2
+
+
+
+
+
+
+FROM mariadb:10.5.8
+
+ENV DB_HOST=$DB_HOST
+ENV DB_USER=$DB_USER
+ENV DB_PASS=$DB_PASS
+ENV DB_NAME=$DB_NAME
+ENV DB_PORT=$DB_PORT
+ENV CMD2=$CMD2
+
+WORKDIR /app
+COPY . .
+RUN npm install
+
+
+CMD mysql -h $DB_HOST -u $DB_USER -p $DB_PASS $DB_NAME < /init.sql && if [[ "$CMD2" == "true" ]]; then ./commandTwo.sh; fi

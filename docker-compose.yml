@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  node:
+    container_name: node
+    image: node:18-alpine
+    env_file: ./env
+    build:
+      context: .
+      dockerfile: node.dockerfile
+
+    ports:
+      - 127.0.0.1:3000:3000
+
+  mariaDB:
+    container_name: mariaDB
+    image: mariadb:10.5.8
+    env_file: ./env
+
+    build:
+      context: .
+      dockerfile: mariaDB.dockerfile
+      args:
+        - DB_HOST: ${DB_HOST}
+        - DB_USER: ${DB_USER}
+        - DB_PASS: ${DB_PASS}
+        - DB_NAME: ${DB_NAME}
+        - DB_PORT: ${DB_PORT}
+        - CMD2: ${CMD2}
+
+    ports:
+      - 127.0.0.1:3306:3306
+
+    volumes:
+      - ./data/mysql:/var/lib/mysql
